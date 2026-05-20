@@ -2,111 +2,46 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音频格式转换器</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 85%; max-width: 400px; text-align: center; }
-        h2 { color: #1d1d1f; margin-bottom: 20px; }
-        .file-box { border: 2px dashed #0071e3; padding: 30px 20px; border-radius: 12px; cursor: pointer; background: #f5f5f7; margin-bottom: 20px; }
-        .btn { background: #0071e3; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; }
-        .btn:disabled { background: #bae0ff; cursor: not-allowed; }
-        #status { margin-top: 15px; color: #86868b; font-size: 14px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Audio Converter Pro</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="card">
-    <h2>音频转换工具</h2>
-    <div class="file-box" onclick="document.getElementById('audioFile').click()">
-        <span id="fileName">点击选择或拖入 M4A 文件</span>
-        <input type="file" id="audioFile" accept=".m4a,audio/*" style="display:none">
+    <div class="glass-container">
+        <header>
+            <div class="apple-icon"></div>
+            <h1>音频转换专业版</h1>
+            <p class="desc">由云端引擎驱动的高清 MP3 转换器</p>
+        </header>
+
+        <main>
+            <div class="drop-zone" id="dropZone">
+                <div class="inner-content">
+                    <div class="upload-icon">↑</div>
+                    <p id="fileLabel">选择 M4A 或 WAV 文件</p>
+                    <span id="fileInfo">支持最大 50MB</span>
+                </div>
+                <input type="file" id="fileInput" accept="audio/*" hidden>
+            </div>
+
+            <div class="settings-card">
+                <div class="setting-item">
+                    <span>目标格式</span>
+                    <select id="format">
+                        <option value="mp3">MP3 (标准)</option>
+                        <option value="wav">WAV (无损)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="convertBtn" class="primary-btn" disabled>立即转换</button>
+        </main>
+
+        <div id="statusArea" class="status-hidden">
+            <div class="loader"></div>
+            <p id="statusMsg">准备就绪</p>
+        </div>
     </div>
-    <button class="btn" id="convertBtn" disabled>转换并下载 MP3/WAV</button>
-    <div id="status"></div>
-</div>
-
-<script>
-    const fileInput = document.getElementById('audioFile');
-    const fileName = document.getElementById('fileName');
-    const convertBtn = document.getElementById('convertBtn');
-    const status = document.getElementById('status');
-    let audioBuffer = null;
-
-    fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        fileName.textContent = file.name;
-        convertBtn.disabled = false;
-        status.textContent = "文件已加载，准备转换...";
-    });
-
-    convertBtn.addEventListener('click', async () => {
-        const file = fileInput.files[0];
-        if (!file) return;
-        
-        status.textContent = "正在解码音频（这可能需要一点时间）...";
-        convertBtn.disabled = true;
-
-        try {
-            const arrayBuffer = await file.arrayBuffer();
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            audioCtx.decodeAudioData(arrayBuffer, (buffer) => {
-                status.textContent = "正在打包格式...";
-                const wavData = bufferToWav(buffer);
-                const blob = new Blob([wavData], { type: 'audio/wav' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = file.name.replace(/\.[^/.]+$/, "") + ".mp3";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                status.textContent = "转换成功！已触发下载。";
-                convertBtn.disabled = false;
-            }, (err) => {
-                status.textContent = "解码失败：iOS 浏览器可能不支持此文件的编码或文件过大。";
-                convertBtn.disabled = false;
-            });
-        } catch (e) {
-            status.textContent = "转换出错，请重试。";
-            convertBtn.disabled = false;
-        }
-    });
-
-    // 快捷将 AudioBuffer 转换为标准播放容器格式
-    function bufferToWav(buffer) {
-        let numOfChan = buffer.numberOfChannels,
-            length = buffer.length * numOfChan * 2 + 44,
-            bufferArr = new ArrayBuffer(length),
-            view = new DataView(bufferArr),
-            channels = [], i, sample,
-            offset = 0,
-            pos = 0;
-
-        function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
-        function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
-
-        setUint32(0x46464952); setUint32(length - 8); setUint32(0x45564157);
-        setUint32(0x20746d66); setUint32(16); setUint16(1); setUint16(numOfChan);
-        setUint32(buffer.sampleRate); setUint32(buffer.sampleRate * 2 * numOfChan);
-        setUint16(numOfChan * 2); setUint16(16); setUint32(0x61746164); setUint32(length - pos - 4);
-
-        for (i = 0; i < buffer.numberOfChannels; i++) channels.push(buffer.getChannelData(i));
-
-        while (pos < length) {
-            for (i = 0; i < numOfChan; i++) {
-                sample = Math.max(-1, Math.min(1, channels[i][offset]));
-                sample = (sample < 0 ? sample * 0x8000 : sample * 0x7FFF);
-                view.setInt16(pos, sample, true);
-                pos += 2;
-            }
-            offset++;
-        }
-        return bufferArr;
-    }
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
