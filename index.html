@@ -3,481 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To: ZZY - 520 Happy Day</title>
+    <title>一份来自内心的灵魂拷问 💖</title>
     <style>
-        :root {
-            --primary-pink: #ff6b8b;
-            --secondary-pink: #ff4757;
-            --soft-bg: #fff5f6;
-            --text-dark: #2f3542;
-            --text-light: #747d8c;
-            --gold: #ffa502;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #ffe6ea 0%, #fff5f6 50%, #e8f4fd 100%);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        /* 环境漂浮元素容器 */
-        .ambient-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* 屏幕包裹层 */
-        .screen-container {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            padding: 20px;
-        }
-
-        /* 磨砂玻璃主体卡片 */
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 15px 35px rgba(255, 107, 139, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* 阶段状态控制 */
-        .stage {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-
-        .stage.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 排版字体 */
-        h1 {
-            font-size: 2rem;
-            color: var(--secondary-pink);
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--text-dark);
-            margin-bottom: 25px;
-        }
-
-        .highlight-name {
-            color: var(--secondary-pink);
-            font-weight: bold;
-            font-size: 1.4rem;
-            position: relative;
-            display: inline-block;
-            margin: 0 5px;
-        }
-
-        /* 按钮设计 */
-        .btn-group {
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #fff0f5; /* 浪漫淡粉色背景 */
             display: flex;
             flex-direction: column;
-            gap: 15px;
             align-items: center;
-            position: relative;
-            margin-top: 20px;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-
-        .btn {
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(255, 182, 193, 0.4);
+            max-width: 400px;
             width: 85%;
-            padding: 14px 28px;
-            font-size: 1.1rem;
-            font-weight: 600;
+        }
+        .heart-icon {
+            font-size: 50px;
+            color: #ff69b4;
+            animation: heartbeat 1.2s infinite;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #ff4500;
+            margin-bottom: 40px;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        .btn-group {
+            position: relative;
+            height: 60px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        button {
+            padding: 12px 35px;
+            font-size: 18px;
+            font-weight: bold;
             border: none;
-            border-radius: 50px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            outline: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary-pink), var(--secondary-pink));
+        #yes-btn {
+            background-color: #ff69b4; /* 恋爱粉 */
             color: white;
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.3);
+            transition: transform 0.2s;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.4);
+        #yes-btn:active {
+            transform: scale(0.95);
         }
-
-        .btn-secondary {
-            background: #f1f2f6;
-            color: var(--text-light);
-            position: relative;
-        }
-
-        /* 动态打字机区域 */
-        .typing-box {
-            text-align: left;
-            min-height: 120px;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 20px;
-            border-radius: 16px;
-            margin: 20px 0;
-            border-left: 4px solid var(--primary-pink);
-            font-size: 1rem;
-        }
-
-        /* 心形跳动容器 */
-        .heart-pulse-box {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 25px;
-        }
-
-        .heart-svg {
-            width: 100%;
-            height: 100%;
-            fill: var(--secondary-pink);
-            animation: heartBeat 1.2s infinite cubic-bezier(0.215, 0.610, 0.355, 1);
-            filter: drop-shadow(0 5px 10px rgba(255, 71, 87, 0.3));
-        }
-
-        @keyframes heartBeat {
-            0% { transform: scale(0.95); }
-            5% { transform: scale(1.1); }
-            39% { transform: scale(0.92); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
-            100% { transform: scale(0.95); }
-        }
-
-        /* 彩带画布 */
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        /* 恋爱计时网格 */
-        .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 25px 0;
-        }
-
-        .timer-item {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 10px 5px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 107, 139, 0.2);
-        }
-
-        .timer-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--secondary-pink);
-            display: block;
-        }
-
-        .timer-label {
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
-
-        /* 背景微环境动画漂浮颗粒 */
-        .floating-heart {
+        #no-btn {
+            background-color: #a9a9a9; /* 灰色 */
+            color: white;
             position: absolute;
-            color: rgba(255, 107, 139, 0.4);
-            font-size: 20px;
-            animation: floatUp 6s linear infinite;
-            bottom: -20px;
+            right: 15%;
         }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-105vh) rotate(360deg);
-                opacity: 0;
-            }
+        /* 心跳动画 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.15); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="confetti-canvas"></canvas>
-
-    <div class="ambient-container" id="ambient-hearts"></div>
-
-    <div class="screen-container">
-        <div class="card">
-            
-            <div id="stage-1" class="stage active">
-                <div class="heart-pulse-box">
-                    <svg class="heart-svg" viewBox="0 0 32 32">
-                        <path d="M16 28.5s-12-7.312-12-14.75C4 8.563 8.313 4 13.5 4c3.063 0 5.75 1.75 7.5 4.375C22.75 5.75 25.438 4 28.5 4 33.688 4 38 8.563 38 13.75c0 7.438-12 14.75-12 14.75L16 28.5z"/>
-                    </svg>
-                </div>
-                <h1>Dear <span class="highlight-name">ZZY</span></h1>
-                <p>这里有一份为你特制的信息，想请你亲自开启。准备好查看了吗？</p>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="goToStage(2)">开启惊喜 ✨</button>
-                </div>
-            </div>
-
-            <div id="stage-2" class="stage">
-                <h1>我的心声 💌</h1>
-                <div class="typing-box" id="typing-area"></div>
-                <div class="btn-group" id="stage-2-btns" style="display: none;">
-                    <button class="btn btn-primary" onclick="goToStage(3)">继续前进 ❤️</button>
-                </div>
-            </div>
-
-            <div id="stage-3" class="stage">
-                <div class="heart-pulse-box">
-                    <svg class="heart-svg" viewBox="0 0 32 32">
-                        <path d="M16 28.5s-12-7.312-12-14.75C4 8.563 8.313 4 13.5 4c3.063 0 5.75 1.75 7.5 4.375C22.75 5.75 25.438 4 28.5 4 33.688 4 38 8.563 38 13.75c0 7.438-12 14.75-12 14.75L16 28.5z"/>
-                    </svg>
-                </div>
-                <h1>郑重且温柔的邀请</h1>
-                <p>世事如苍狗，生命如流星。但在这一刻，我想确凿地问你：</p>
-                <p style="font-weight: 600; font-size: 1.2rem; color: var(--secondary-pink);">“ZZY，你愿意做我的女朋友吗？”</p>
-                <div class="btn-group" style="height: 140px; margin-top: 30px;">
-                    <button class="btn btn-primary" id="btn-yes" onclick="celebrateSuccess()">我愿意 🌹</button>
-                    <button class="btn btn-secondary" id="btn-no" onmouseover="dodgeButton()" onclick="dodgeButton()">拒绝（点不到我吧）</button>
-                </div>
-            </div>
-
-            <div id="stage-4" class="stage">
-                <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
-                <h1>谢谢你，我的女孩 ❤️</h1>
-                <p>从今天起，我们相爱的每一秒都将被记录：</p>
-                
-                <div class="timer-grid">
-                    <div class="timer-item"><span class="timer-value" id="days">00</span><span class="timer-label">天</span></div>
-                    <div class="timer-item"><span class="timer-value" id="hours">00</span><span class="timer-label">时</span></div>
-                    <div class="timer-item"><span class="timer-value" id="minutes">00</span><span class="timer-label">分</span></div>
-                    <div class="timer-item"><span class="timer-value" id="seconds">00</span><span class="timer-label">秒</span></div>
-                </div>
-
-                <p style="font-size: 0.95rem; color: var(--text-light); font-style: italic;">
-                    “往后余生，风雪是你，平淡是你，清贫也是你，荣华是你，心底温柔是你，目光所致，也是你。”
-                </p>
-            </div>
-
-        </div>
+<div class="container">
+    <div class="heart-icon">❤️</div>
+    <h1 id="question">郑泽佑，你到底爱不爱我？</h1>
+    <div class="btn-group">
+        <!-- 为了防止按钮瞬移时重叠，把“爱”固定在左边 -->
+        <button id="yes-btn" onclick="loveAnswer()">爱</button>
+        <button id="no-btn" onmouseover="escapeBtn()" onclick="escapeBtn()">不爱</button>
     </div>
+</div>
 
-    <script>
-        // 情书文案配置 (支持自定义修改)
-        const letterText = "亲爱的 ZZY：\\n\\n在这个特别的日子里，有些话想单独对你说。\\n自从生命中有了你的出现，原本平淡的每一天，都像是洒满了细碎的星光。\\n你的一颦一笑，你的温柔与可爱，都悄悄装进了我的心里。\\n\\n我贪恋每一个能和你对话的瞬间，也期待未来的每一场春秋冬夏。";
+<script>
+    // 让“不爱”按钮疯狂逃跑的逻辑
+    function escapeBtn() {
+        const noBtn = document.getElementById('no-btn');
+        
+        // 计算安全的瞬移边界，防止按钮跑到屏幕外面去
+        const padding = 30;
+        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding * 2) + padding;
+        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding * 2) + padding;
+        
+        noBtn.style.position = 'fixed';
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+    }
 
-        // 页面多阶段过渡导航
-        function goToStage(stageNum) {
-            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
-            setTimeout(() => {
-                const target = document.getElementById(`stage-${stageNum}`);
-                if(target) {
-                    target.classList.add('active');
-                    if(stageNum === 2) startTyping();
-                }
-            }, 300);
-        }
+    // 点击“爱”之后的甜蜜反转
+    function loveAnswer() {
+        const question = document.getElementById('question');
+        const btnGroup = document.querySelector('.btn-group');
+        const heart = document.querySelector('.heart-icon');
+        
+        question.innerHTML = "✨ 哼，算你识相！<br>我也超级爱你呀！💕";
+        btnGroup.style.display = 'none'; // 隐藏所有按钮
+        heart.innerHTML = "💖👩‍❤️‍👨💖";
+    }
+</script>
 
-        // 纯原生高性能打字机动效
-        function startTyping() {
-            const area = document.getElementById('typing-area');
-            let index = 0;
-            area.innerHTML = "";
-            let currentStr = "";
-            
-            function type() {
-                if (index < letterText.length) {
-                    if (letterText.substr(index, 2) === '\\n') {
-                        currentStr += "<br>";
-                        index += 2;
-                    } else {
-                        currentStr += letterText[index];
-                        index++;
-                    }
-                    area.innerHTML = currentStr + '<span style="animation: blink 0.7s infinite">|</span>';
-                    setTimeout(type, 70);
-                } else {
-                    area.innerHTML = currentStr;
-                    document.getElementById('stage-2-btns').style.display = 'block';
-                }
-            }
-            type();
-        }
-
-        // 拒绝按钮智能边界逃逸算法（限在卡片框架内，避免飞出屏幕外无法交互）
-        function dodgeButton() {
-            const noBtn = document.getElementById('btn-no');
-            const card = document.querySelector('.card');
-            const cardRect = card.getBoundingClientRect();
-            
-            const maxX = cardRect.width - noBtn.offsetWidth - 40;
-            const maxY = cardRect.height - noBtn.offsetHeight - 40;
-            
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-        }
-
-        // Canvas 高性能彩带渲染粒子引擎
-        const canvas = document.getElementById('confetti-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let animationActive = false;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class ConfettiParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height;
-                this.size = Math.random() * 8 + 4;
-                this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
-                this.speedX = Math.random() * 3 - 1.5;
-                this.speedY = Math.random() * 4 + 3;
-                this.rotation = Math.random() * 360;
-                this.rotationSpeed = Math.random() * 4 - 2;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.rotation += this.rotationSpeed;
-                if(this.y > canvas.height) {
-                    this.y = -20;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation * Math.PI / 180);
-                ctx.fillStyle = this.color;
-                ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-                ctx.restore();
-            }
-        }
-
-        function initConfetti() {
-            particles = [];
-            for(let i=0; i<150; i++) {
-                particles.push(new ConfettiParticle());
-            }
-        }
-
-        function animateConfetti() {
-            if(!animationActive) return;
-            ctx.clearRect(0,0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateConfetti);
-        }
-
-        // 同步触发成功状态
-        let loveInterval;
-        function celebrateSuccess() {
-            animationActive = true;
-            initConfetti();
-            animateConfetti();
-            goToStage(4);
-            startLoveClock();
-        }
-
-        // 恋爱开始时间精准正向计时
-        function startLoveClock() {
-            const loveStartDate = new Date(); // 默认从点击同意的那一刻起算，也可手动改为特定纪念日如：new Date("2026-05-20 13:14:00")
-            
-            function updateClock() {
-                const now = new Date();
-                const diff = now - loveStartDate;
-                
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((diff / 1000 / 60) % 60);
-                const seconds = Math.floor((diff / 1000) % 60);
-                
-                document.getElementById('days').innerText = String(days).padStart(2, '0');
-                document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-                document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-                document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-            }
-            
-            updateClock();
-            loveInterval = setInterval(updateClock, 1000);
-        }
-
-        // 背景微环境爱心/樱花粒子漂浮算法
-        function createAmbientHearts() {
-            const container = document.getElementById('ambient-hearts');
-            const icons = ['❤️', '💖', '🌸', '💕', '✨'];
-            
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'floating-heart';
-                heart.innerText = icons[Math.floor(Math.random() * icons.length)];
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = Math.random() * 20 + 15 + 'px';
-                heart.style.animationDuration = Math.random() * 4 + 4 + 's';
-                container.appendChild(heart);
-                
-                setTimeout(() => {
-                    heart.remove();
-                }, 8000);
-            }, 400);
-        }
-        createAmbientHearts();
-    </script>
 </body>
 </html>
